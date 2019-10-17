@@ -543,37 +543,20 @@ function createMesh(M, N, callback) {
 
     for (let r = 1; r < N; r++) {
         let mdown = (r-1)*dy, mup = r*dy;
-        if (r % 2 == 1) {
-            let c = 0;
-            for(let t = 0; t < num_triangles; t++) {
-                let triangle = [];
-                if (t % 2 == 0) {
-                    // up triangle
-                    triangle = [[c, mdown], [c, mup], [c+dx, mdown]];
-                    c = c + dx;
-                }
-                else {
-                    // down triangle
-                    triangle = [[c-dx, mup], [c, mdown], [c, mup]];
-                }
-                ret.push(triangle);
+        let c = 1 - r % 2;
+        let sign = (r % 2 == 1 ? 1 : -1);
+        for(let t = 0; t < num_triangles; t++) {
+            let triangle = [];
+            if (t % 2 == 0) {
+                // up triangle
+                triangle = [[c, mdown], [c, mup], [c+ sign*dx, mdown]];
+                c = c + sign*dx;
             }
-        }
-        else {
-            let c = 1;
-            for(let t = 0; t < num_triangles; t++) {
-                let triangle = [];
-                if (t % 2 == 0) {
-                    // up triangle
-                    triangle = [[c, mdown], [c, mup], [c-dx, mdown]];
-                    c = c - dx;
-                }
-                else {
-                    // down triangle
-                    triangle = [[c+dx, mup], [c, mdown], [c, mup]];
-                }
-                ret.push(triangle);
+            else {
+                // down triangle
+                triangle = [[c-sign*dx, mup], [c, mdown], [c, mup]];
             }
+            ret.push(triangle);
         }
     }
     return ret;
