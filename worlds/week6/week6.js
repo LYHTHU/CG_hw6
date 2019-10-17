@@ -531,11 +531,51 @@ function sphere(u, v) {
 
 function createMesh(M, N, callback) {
 
-    let ret = [];
-    let dx = 1.0/M, dy = 1.0/N;
-    // zigzag
-    
+    if (M == 1 && N == 1) {
+        throw "Two triangles!";
+    }
 
+    let ret = [];
+    let dx = 1.0/(M-1), dy = 1.0/(N-1);
+    // zigzag
+    // There are N-1 rows, 1 => N-1
+    let num_triangles = 2*(M-1);
+
+    for (let r = 1; r < N; r++) {
+        let mdown = (r-1)*dy, mup = r*dy;
+        if (r % 2 == 1) {
+            let c = 0;
+            for(let t = 0; t < num_triangles; t++) {
+                let triangle = [];
+                if (t % 2 == 0) {
+                    // up triangle
+                    triangle = [[c, mdown], [c, mup], [c+dx, mdown]];
+                    c = c + dx;
+                }
+                else {
+                    // down triangle
+                    triangle = [[c-dx, mup], [c, mdown], [c, mup]];
+                }
+                ret.push(triangle);
+            }
+        }
+        else {
+            let c = 1;
+            for(let t = 0; t < num_triangles; t++) {
+                let triangle = [];
+                if (t % 2 == 0) {
+                    // up triangle
+                    triangle = [[c, mdown], [c, mup], [c-dx, mdown]];
+                    c = c - dx;
+                }
+                else {
+                    // down triangle
+                    triangle = [[c+dx, mup], [c, mdown], [c, mup]];
+                }
+                ret.push(triangle);
+            }
+        }
+    }
     return ret;
 }
 
