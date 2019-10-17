@@ -1,7 +1,7 @@
 "use strict"
 
 
-const VERTEX_SIZE = 6; // EACH VERTEX CONSISTS OF: x,y,z, ny,ny,nz
+const VERTEX_SIZE = 8; // EACH VERTEX CONSISTS OF: x,y,z, ny,ny,nz, u,v
 
 class Mat {
     constructor(height, width, v = 0.0) {
@@ -530,12 +530,24 @@ function sphere(u, v) {
 }
 
 function createMesh(M, N, callback) {
-
+    let ret = [];
     if (M == 1 && N == 1) {
-        throw "Two triangles!";
+        throw "No triangles!";
     }
 
-    let ret = [];
+    let addTriangle = (a, b, c) => {
+        //  a, b, c are all [u, v] pairs.
+        let x = callback(a[0], a[1]);
+        let y = callback(b[0], b[1]);
+        let z = callback(c[0], c[1]);
+        x = x.concat(a);
+        y = y.concat(b);
+        z = z.concat(c);
+        ret = ret.concat(x);
+        ret = ret.concat(y);
+        ret = ret.concat(z);
+    }
+
     let dx = 1.0/(M-1), dy = 1.0/(N-1);
     // zigzag
     // There are N-1 rows, 1 => N-1
@@ -549,14 +561,15 @@ function createMesh(M, N, callback) {
             let triangle = [];
             if (t % 2 == 0) {
                 // up triangle
-                triangle = [[c, mdown], [c, mup], [c+ sign*dx, mdown]];
+                // triangle = [[c, mdown], [c, mup], [c+ sign*dx, mdown]];
+                addTriangle([c, mdown], [c, mup], [c+ sign*dx, mdown])
                 c = c + sign*dx;
             }
             else {
                 // down triangle
-                triangle = [[c-sign*dx, mup], [c, mdown], [c, mup]];
+                // triangle = [[c-sign*dx, mup], [c, mdown], [c, mup]];
+                addTriangle([c-sign*dx, mup], [c, mdown], [c, mup])
             }
-            ret.push(triangle);
         }
     }
     return ret;
