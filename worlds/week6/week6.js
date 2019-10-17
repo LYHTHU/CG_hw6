@@ -561,22 +561,16 @@ function onStartFrame(t, state) {
     gl.enable(gl.DEPTH_TEST);
 }
 
-// 
-
-// 
 function addToptoy(state) {
     let m = state.m;
     let VPoly = state.VPoly;
     let VCube = state.VCube;
-
     m.save();
     m.identity();
     m.translate(0,0,-6);
     let scan =0.1*state.time - Math.round(0.1*state.time);
-
     m.translate(4*Math.abs(scan)*Math.cos(state.time), 0, 4*Math.abs(scan)*Math.sin(state.time));
     m.rotateZ(0.5*Math.cos(state.time));
-
     m.save();
         gl.uniform3fv(state.uMaterialsLoc[0].ambient , [1.,0.37,0.]);
         gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [1.,0.37,0.]);
@@ -591,94 +585,6 @@ function addToptoy(state) {
 
         gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
         gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-        
-        m.save();
-        // jumping
-            gl.uniform3fv(state.uMaterialsLoc[0].ambient , [0.,0.37,0.]);
-            gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [0.,0.37,0.]);
-            gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-            gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-            gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-            gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-            gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-            m.scale(0.1,1,-.1);
-            m.translate(0, 2 + 20*Math.abs(Math.cos(5*state.time)), 0);
-            gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-            gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-
-        m.restore();
-    m.restore();
-
-    m.save();
-        m.scale(.7, .1, .7);
-        m.rotateY(2*state.time);
-        m.translate(0., -2.0, 0.);
-
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient , [0.0, 0.4, 0.4]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [0.0, 0.25, 0.25]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [1.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [0.5, 0.5, 0.5]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [1.0, 1.0, 1.0]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-        gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-    m.restore();
-
-    m.save();
-        m.scale(.5, .1, .5);
-        m.rotateY(3*state.time);
-        m.translate(0., -4.0, 0.);
-
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient , [0.03, 0.1, 0.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [0.05, 0.25, 0.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [1.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [0.5, 0.5, 0.5]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [1.0, 1.0, 1.0]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-        gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-    m.restore();
-
-    m.save();
-        m.scale(.3, .1, .3);
-        m.rotateY(4*state.time);
-        m.translate(0., -6.0, 0.);
-
-        // gl.uniform3fv(state.uColorLoc, [0., 1., 0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient , [0.57, 0.8, 0.84]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [0.57, 0.8, 0.84]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [1.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [0.5, 0.5, 0.5]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [1.0, 1.0, 1.0]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-        gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-    m.restore();
-
-    m.save();
-        m.scale(.1, .1, .1);
-        m.rotateY(4*state.time);
-        m.translate(0., -8.0, 0.);
-
-        gl.uniform3fv(state.uColorLoc, [0., 1., 0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient , [0.36, 0., 0.4]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [0.36, 0., 0.4]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [1.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [0.5, 0.5, 0.5]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [1.0, 1.0, 1.0]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-        gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-    m.restore();
-
     m.restore();
 }
 
@@ -689,9 +595,7 @@ function addOct(state) {
     m.save();
     m.identity();
     m.translate(2, 0., -6);
-
     let scan = state.time / 2 - Math.round(state.time / 2);
-
     m.save();
         gl.uniform3fv(state.uMaterialsLoc[0].ambient, [217 / 255, 217 / 255,0.]);
         gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [217 / 255, 217 / 255, 0.]);
@@ -700,64 +604,12 @@ function addOct(state) {
         gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
         gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
         m.rotateZ(Math.cos(state.time));
         m.translate(-1, 4.0 * scan, 0);
-
         m.rotateY(3*state.time);
         m.scale(.2, .4, .2);
-
         gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
         gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-        
-        m.save();
-            gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0.1, 0.5, 0.5]);
-            gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0.1, 0.5, 0.5]);
-            gl.uniform3fv(state.uMaterialsLoc[0].specular, [0., 1., 1.]);
-            gl.uniform1f(state.uMaterialsLoc[0].power, 20.);
-            gl.uniform3fv(state.uMaterialsLoc[0].reflectc, [1.0, 1.0, 1.0]);
-            gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5, 0.5, 0.5]);
-            gl.uniform1f(state.uMaterialsLoc[0].refraction, 1.5);
-            m.translate(0, -1, 0);
-            m.rotateZ(0.5);
-            m.translate(0, -1, 0);
-            gl.uniformMatrix4fv(state.uModelLoc, false, m.value()); 
-            gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-        m.restore();
-
-        m.save();
-            m.translate(0, -1, 0);
-            m.rotateZ(-0.5);
-            m.translate(0, -1, 0);
-            gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
-            gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-        m.restore();
-
-        m.save();
-            gl.uniform3fv(state.uMaterialsLoc[0].ambient, [1., 0., 0.]);
-            gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [1., 0., 0.]);
-            gl.uniform3fv(state.uMaterialsLoc[0].specular, [0., 1., 1.]);
-            gl.uniform1f(state.uMaterialsLoc[0].power, 20.);
-            gl.uniform3fv(state.uMaterialsLoc[0].reflectc, [1.0, 1.0, 1.0]);
-            gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5, 0.5, 0.5]);
-            gl.uniform1f(state.uMaterialsLoc[0].refraction, 1.5);
-            m.translate(0, -3, 0);
-            m.scale(0.4, 0.4, 0.4);
-            gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
-            gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-        m.restore();
-
-        for ( let i = 2; i < 5; i ++) {
-            m.save();
-            let scan2 = state.time * i - Math.round(state.time * i);
-            m.translate(0, -4.0 * scan2, 0);
-            m.translate(0, -6, 0);
-            m.scale(0.1, 0.1, 0.1);
-            gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
-            gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-            m.restore();
-        }
-
     m.restore();
     m.restore();
 }
@@ -772,6 +624,12 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
     gl.uniformMatrix4fv(state.uViewLoc, false, new Float32Array(viewMat));
     gl.uniformMatrix4fv(state.uProjLoc, false, new Float32Array(projMat));
 
+    let drawShape = (color, type, vertices) => {
+       gl.uniform3fv(state.uColorLoc, color);
+       gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
+       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+       gl.drawArrays(type, 0, vertices.length / VERTEX_SIZE);
+    }
 
  //////////////////////////////////////////////////////////////////////
 //                                                                    //
@@ -780,9 +638,8 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
 //                                                                    //
  //////////////////////////////////////////////////////////////////////
 
-    addToptoy(state);
-
-    addOct(state);
+    // addToptoy(state);
+    // addOct(state);
     
     var bpe = Float32Array.BYTES_PER_ELEMENT;
 
