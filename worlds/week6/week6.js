@@ -439,6 +439,7 @@ async function setup(state) {
 
     state.sphereV = createMesh(30, 30, sphere);
     state.torusV = createMesh(30, 30, torus);
+    state.cylinderV = createMesh(30, 30, cylinder);
 
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( cubeVertices ), gl.STATIC_DRAW);
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VPoly.length + VCube.length), gl.STATIC_DRAW, 0);
@@ -537,6 +538,26 @@ function torus(u, v) {
     let nz =Math.sin(phi);
 
     return [x,y,z, nx,ny,nz];
+}
+
+function openTube(u, v) { 
+    theta = 2*Math.PI*u;
+    x = cos(theta);
+    y = sin(theta);
+    z = 2*v - 1;
+    return [x,y,z, x,y,0];
+}
+
+function cylinder(u, v) {
+    let c = Math.cos(2*Math.PI*u);
+    let s = Math.sin(2*Math.PI*u);
+    let z = Math.max(-1, Math.min(1, 10*v - 5));
+    
+    switch (Math.floor(5.001 * v)) {
+        case 0: case 5: return [ 0,0,z, 0,0,z ]; // center of back/front end cap
+        case 1: case 4: return [ c,s,z, 0,0,z ];// perimeter of back/front end cap
+        case 2: case 3: return [ c,s,z, c,s,0 ]; // back/front of cylindrical tube
+    }
 }
 
 function createMesh(M, N, callback) {
@@ -647,9 +668,6 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
 //  FOR HOMEWORK, YOU WILL WANT TO DO SOMETHING DIFFERENT.            //
 //                                                                    //
  //////////////////////////////////////////////////////////////////////
-
-    // addToptoy(state);
-    // addOct(state);
     
     var bpe = Float32Array.BYTES_PER_ELEMENT;
     m.identity();
@@ -681,6 +699,21 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
         gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
         drawShape([0,0,0], gl.TRIANGLE_STRIP, torusV);
+    m.restore();
+
+    let cylinderV = state.cylinderV;
+    m.save();
+        m.translate(+.6,-.5,-4);
+        m.rotateX(state.time);
+        m.scale(.4,.4,.4);
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [127 / 255, 0, 0.]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [127 / 255, 0, 0.]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+        drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
     m.restore();
 }
 
