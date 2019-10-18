@@ -310,7 +310,7 @@ let createOctahedron = () => {
 
 
 async function setup(state) {
-    hotReloadFile(getPath('week5.js'));
+    hotReloadFile(getPath('week6.js'));
 
     state.m = new Matrix();
 
@@ -434,23 +434,16 @@ async function setup(state) {
 //                                                         //
  ///////////////////////////////////////////////////////////
 
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( cubeVertices ), gl.STATIC_DRAW);
-
-   
-
 
     let bpe = Float32Array.BYTES_PER_ELEMENT;
-// 
-    let VCube = new Float32Array(createCubeVertices());
-    let VPoly = new Float32Array(createOctahedron());
-    state.VCube = VCube;
-    state.VPoly = VPoly;
-    gl.bufferData(gl.ARRAY_BUFFER, 
-        new Float32Array(VPoly.length + VCube.length), 
-        gl.STATIC_DRAW, 0);
-    gl.bufferSubData(gl.ARRAY_BUFFER, 0, VCube, 0);
-    gl.bufferSubData(gl.ARRAY_BUFFER, VCube.length * bpe, VPoly, 0);
-// 
+
+    state.sphereV = createMesh(30,30, sphere);
+
+// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( cubeVertices ), gl.STATIC_DRAW);
+// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VPoly.length + VCube.length), gl.STATIC_DRAW, 0);
+// gl.bufferSubData(gl.ARRAY_BUFFER, 0, VCube, 0);
+// gl.bufferSubData(gl.ARRAY_BUFFER, VCube.length * bpe, VPoly, 0);
+
     let aPos = gl.getAttribLocation(state.program, 'aPos');
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, bpe * VERTEX_SIZE, bpe * 0);
@@ -675,8 +668,6 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
 
 
     let m = state.m;
-    let VCube = state.VCube;
-    let VPoly = state.VPoly;
 
     gl.uniformMatrix4fv(state.uViewLoc, false, new Float32Array(viewMat));
     gl.uniformMatrix4fv(state.uProjLoc, false, new Float32Array(projMat));
@@ -700,6 +691,18 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
     
     var bpe = Float32Array.BYTES_PER_ELEMENT;
 
+    let sphereV = state.sphereV;
+    m.identity();
+    m.translate(-.6,.5,-4);
+    m.scale(.4,.4,.4);
+    gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 127 / 255,0.]);
+    gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 127 / 255, 0.]);
+    gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+    gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+    gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+    gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+    gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+    drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
 }
 
 function onEndFrame(t, state) {
@@ -707,7 +710,7 @@ function onEndFrame(t, state) {
 
 export default function main() {
     const def = {
-        name         : 'week5',
+        name         : 'week6',
         setup        : setup,
         onStartFrame : onStartFrame,
         onEndFrame   : onEndFrame,
