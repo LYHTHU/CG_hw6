@@ -437,7 +437,8 @@ async function setup(state) {
 
     let bpe = Float32Array.BYTES_PER_ELEMENT;
 
-    state.sphereV = createMesh(30,30, sphere);
+    state.sphereV = createMesh(30, 30, sphere);
+    state.torusV = createMesh(30, 30, torus);
 
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( cubeVertices ), gl.STATIC_DRAW);
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VPoly.length + VCube.length), gl.STATIC_DRAW, 0);
@@ -459,7 +460,7 @@ async function setup(state) {
 //  FOR HOMEWORK, YOU NEED TO IMPLEMENT THESE SIX MATRIX FUNCTIONS.  //
 //  EACH FUNCTION SHOULD RETURN AN ARRAY WITH 16 VALUES.             //
 //                                                                   //
-//  SINCE YOU ALREADY DID THIS FOR THE PREVIOUS ASSIGNMENT,          //
+// Math.sinCE YOU ALREADY DID THIS FOR THE PREVIOUS ASSIGNMENT,          //
 //  YOU CAN JUST USE THE FUNCTION DEFINITIONS YOU ALREADY CREATED.   //
 //                                                                   //
  /////////////////////////////////////////////////////////////////////
@@ -518,8 +519,24 @@ function sphere(u, v) {
     let x = Math.cos(theta)*Math.cos(phi)
     let y = Math.sin(theta)*Math.cos(phi)
     let z = Math.sin(phi)
-
     return [x, y, z, x, y, z]
+}
+
+function torus(u, v) {
+    let theta = 2*Math.PI*u;
+    let phi = 2*Math.PI*v;
+
+    let r = 0.2;
+
+    let x =Math.cos(theta)*(1 + r*Math.cos(phi));
+    let y =Math.sin(theta)*(1 + r*Math.cos(phi));
+    let z = r*Math.sin(phi);
+
+    let nx =Math.cos(theta)*Math.cos(phi);
+    let ny =Math.sin(theta)*Math.cos(phi);
+    let nz =Math.sin(phi);
+
+    return [x,y,z, nx,ny,nz];
 }
 
 function createMesh(M, N, callback) {
@@ -573,7 +590,7 @@ function onStartFrame(t, state) {
     state.color0 = [1,.5,.2];
 
 
-    // uTime IS TIME IN SECONDS SINCE START TIME.
+    // uTime IS TIME IN SECONDSMath.sinCE START TIME.
 
     if (!state.tStart)
         state.tStart = t;
@@ -611,62 +628,7 @@ function onStartFrame(t, state) {
     gl.enable(gl.DEPTH_TEST);
 }
 
-function addToptoy(state) {
-    let m = state.m;
-    let VPoly = state.VPoly;
-    let VCube = state.VCube;
-    m.save();
-    m.identity();
-    m.translate(0,0,-6);
-    let scan =0.1*state.time - Math.round(0.1*state.time);
-    m.translate(4*Math.abs(scan)*Math.cos(state.time), 0, 4*Math.abs(scan)*Math.sin(state.time));
-    m.rotateZ(0.5*Math.cos(state.time));
-    m.save();
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient , [1.,0.37,0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse , [1.,0.37,0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-
-        m.scale(.9, .1, .9);
-        m.rotateY(state.time);
-
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value() );
-        gl.drawArrays(gl.TRIANGLES, 0, VCube.length / VERTEX_SIZE);
-    m.restore();
-}
-
-function addOct(state) {
-    let m = state.m;
-    let VPoly = state.VPoly;
-    let VCube = state.VCube;
-    m.save();
-    m.identity();
-    m.translate(2, 0., -6);
-    let scan = state.time / 2 - Math.round(state.time / 2);
-    m.save();
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [217 / 255, 217 / 255,0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [217 / 255, 217 / 255, 0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-        m.rotateZ(Math.cos(state.time));
-        m.translate(-1, 4.0 * scan, 0);
-        m.rotateY(3*state.time);
-        m.scale(.2, .4, .2);
-        gl.uniformMatrix4fv(state.uModelLoc, false, m.value());
-        gl.drawArrays(gl.TRIANGLES, VCube.length / VERTEX_SIZE, VPoly.length / VERTEX_SIZE);
-    m.restore();
-    m.restore();
-}
-
 function onDraw(t, projMat, viewMat, state, eyeIdx) {
-
-
     let m = state.m;
 
     gl.uniformMatrix4fv(state.uViewLoc, false, new Float32Array(viewMat));
@@ -690,19 +652,36 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
     // addOct(state);
     
     var bpe = Float32Array.BYTES_PER_ELEMENT;
+    m.identity();
 
     let sphereV = state.sphereV;
-    m.identity();
-    m.translate(-.6,.5,-4);
-    m.scale(.4,.4,.4);
-    gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 127 / 255,0.]);
-    gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 127 / 255, 0.]);
-    gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-    gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
-    gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-    gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-    gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-    drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+    m.save();
+        m.translate(-.6,.5,-4);
+        m.scale(.4,.4,.4);
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 127 / 255,0.]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 127 / 255, 0.]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+        drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+    m.restore();
+
+    let torusV = state.torusV; 
+    m.save();
+        m.translate(+.6,.5,-4);
+        m.rotateX(state.time);
+        m.scale(.4,.4,.4);
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 0., 127 / 255]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 0., 127 / 255]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+        drawShape([0,0,0], gl.TRIANGLE_STRIP, torusV);
+    m.restore();
 }
 
 function onEndFrame(t, state) {
