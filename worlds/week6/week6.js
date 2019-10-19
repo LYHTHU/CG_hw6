@@ -681,16 +681,62 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
 
     // sphere
     m.save();
-        m.translate(-.6,.5,0);
-        m.scale(.4,.4,.4);
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 127 / 255,0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 127 / 255, 0.]);
+        m.translate(1, 1.3,- 0);
+        m.scale(.2,.2,.2);
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [1.0, 0.1, 0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [1.0, 0.1, 0]);
         gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
         gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
         gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
         gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
         drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+
+        m.save();
+            gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0.0, 0.1, 0.9]);
+            gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0.0, 0.1, 0.9]);
+            gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+            gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+            gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+            gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+            gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+            m.rotateZ(23.26 / 360 * Math.PI);
+            m.rotateY(state.time);
+            m.translate(2, 0, 0);
+            m.scale(0.1, 0.1, 0.1);
+            drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+        m.restore();
+
+        m.save();
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0.5, 0.5, 0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0.5, 0.5, 0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+        m.rotateZ(23.26 / 360 * Math.PI);
+        m.rotateY(state.time / 2);
+        m.translate(3, 0, 0);
+        m.scale(0.1, 0.1, 0.1);
+        drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+        m.restore();
+
+        m.save();
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 0.5, 0.7]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 0.5, 0.7]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+        m.rotateZ(23.26 / 360 * Math.PI);
+        m.rotateY(state.time / 3);
+        m.translate(4, 0, 0);
+        m.scale(0.1, 0.1, 0.1);
+        drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
+        m.restore();
+    m.restore();
     m.restore();
 
     m.save();
