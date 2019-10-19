@@ -700,7 +700,10 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
 
         m.save();
         m.translate(0, 1.0, 0);
-        m.rotateZ(state.time);
+
+        let theta = 0.17*Math.cos(Math.sqrt(9.8 / 2)*state.time);
+
+        m.rotateZ(theta);
         m.translate(0, -0.1, 0);
         m.scale(1.0, 0.8, 1.0);
             m.save();
