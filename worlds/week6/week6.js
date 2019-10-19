@@ -676,10 +676,7 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
     let second = date.getSeconds();
 
     m.identity();
-    m.translate(0, 0,-4);
-    m.save();
-
-    // sphere
+    m.translate(0, 0, -4);
     m.save();
         m.translate(1, 1.3,- 0);
         m.scale(.2,.2,.2);
@@ -737,9 +734,11 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
         m.restore();
     m.restore();
-    m.restore();
 
-    m.save();
+
+    m.translate(0, -0.2,0);
+    m.save();  
+
     m.translate(0, -0.5, 0);
     let torusV = state.torusV;
     gl.uniform3fv(state.uMaterialsLoc[0].ambient, [191/255, 173/255, 111/255]);
@@ -794,8 +793,7 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
             m.translate(0, 1.17, 0.);
             m.scale(.2,.2,0.05);
             drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
-
-                m.save();
+                
                 gl.uniform3fv(state.uMaterialsLoc[0].ambient, [.1, .1, .1]);
                 gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [.1, .1, .1]);
                 gl.uniform3fv(state.uMaterialsLoc[0].specular, [1.,1.,1.]);
@@ -803,6 +801,20 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
                 gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
                 gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
                 gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+                
+                // scores
+                for (let i = 0; i < 12; i++) {
+                    m.save();
+                    m.rotateZ(i*Math.PI / 6);
+                    m.translate(0, 0.75, 1.);
+                    m.translate(0, 0.1, 1.);
+                    m.rotateX(Math.PI / 2);
+                    m.scale(.01,.01, 0.1);
+                    drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
+                    m.restore();
+                }
+
+                m.save();
                 // seconds
                 m.translate(0, 0, 1.);
                 m.rotateZ(-second / 60 * 2*Math.PI);
@@ -815,7 +827,7 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
                 // minutes
                 m.save();
                 m.translate(0, 0, 1.);
-                let th2 = -minute / 60 * 2*Math.PI - second / 60 * (Math.PI / 6);
+                let th2 = -minute / 60 * 2*Math.PI -(Math.PI / 30)*second / 60 ;
                 m.rotateZ(th2);
                 m.translate(0, 0.3, 1.);
                 m.rotateX(Math.PI / 2);
