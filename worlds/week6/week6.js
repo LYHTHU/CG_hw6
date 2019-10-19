@@ -682,34 +682,40 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         drawShape([0,0,0], gl.TRIANGLE_STRIP, sphereV);
     m.restore();
 
-    let torusV = state.torusV; 
-    m.save();
-        m.translate(+.6,.5,-4);
-        m.rotateX(state.time);
-        m.scale(.4,.4,.4);
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0, 0., 127 / 255]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0, 0., 127 / 255]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-        drawShape([0,0,0], gl.TRIANGLE_STRIP, torusV);
-    m.restore();
+    let torusV = state.torusV;
+    gl.uniform3fv(state.uMaterialsLoc[0].ambient, [191/255, 173/255, 111/255]);
+    gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [191/255, 173/255, 111/255]);
+    gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+    gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
+    gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+    gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+    gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5); 
 
-    let cylinderV = state.cylinderV;
     m.save();
-        m.translate(+.6,-.5,-4);
-        m.rotateX(state.time);
-        m.scale(.4,.4,.4);
-        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [127 / 255, 0, 0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [127 / 255, 0, 0.]);
-        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
-        gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
-        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
-        gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
-        drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
+    m.translate(+.6, 1.0,-4);
+    m.rotateZ(state.time);
+        m.save();
+            m.scale(.04,.1,.04);
+            drawShape([0,0,0], gl.TRIANGLE_STRIP, torusV);
+            for (let i = 0 ; i < 10; i++) {
+                m.translate(0,-1.5,0);
+                m.rotateY(Math.PI / 2)
+                drawShape([0,0,0], gl.TRIANGLE_STRIP, torusV);
+            }
+        m.restore();
+        let cylinderV = state.cylinderV;
+        m.save();
+            m.scale(.2,.2,0.05);
+            m.translate(0,-9,0);
+            gl.uniform3fv(state.uMaterialsLoc[0].ambient, [0.6, 0.6, 0.6]);
+            gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [0.6, 0.6, 0.6]);
+            gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
+            gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
+            gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
+            gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
+            gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+            drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
+        m.restore();
     m.restore();
 
     let cubeV = state.cubeV;
