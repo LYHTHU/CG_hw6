@@ -200,8 +200,8 @@ class Mat {
 let createCubeVertices = () => {
    let v = [];
    let addVertex = a => {
-      for (let i = 0 ; i < a.length ; i++)
-         v.push(a[i]);
+      v = v.concat(a);
+      v = v.concat([0, 0]);
    }
 
    // EACH SQUARE CONSISTS OF TWO TRIANGLES.
@@ -440,6 +440,7 @@ async function setup(state) {
     state.sphereV = createMesh(30, 30, sphere);
     state.torusV = createMesh(30, 30, torus);
     state.cylinderV = createMesh(30, 30, cylinder);
+    state.cubeV = createCubeVertices();
 
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( cubeVertices ), gl.STATIC_DRAW);
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VPoly.length + VCube.length), gl.STATIC_DRAW, 0);
@@ -709,6 +710,22 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
         gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
         drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
+    m.restore();
+
+    let cubeV = state.cubeV;
+
+    m.save();
+        m.translate(-.6, -.5, -4);
+        m.rotateX(state.time);
+        m.scale(.4, .4, .4);
+        gl.uniform3fv(state.uMaterialsLoc[0].ambient, [127 / 255, 0, 127 / 255]);
+        gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [127 / 255, 0, 127 / 255]);
+        gl.uniform3fv(state.uMaterialsLoc[0].specular, [0., 1., 1.]);
+        gl.uniform1f(state.uMaterialsLoc[0].power, 20.);
+        gl.uniform3fv(state.uMaterialsLoc[0].reflectc, [1.0, 1.0, 1.0]);
+        gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5, 0.5, 0.5]);
+        gl.uniform1f(state.uMaterialsLoc[0].refraction, 1.5);
+        drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
     m.restore();
 }
 
