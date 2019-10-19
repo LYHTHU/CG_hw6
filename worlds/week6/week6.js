@@ -560,6 +560,7 @@ function cylinder(u, v) {
     }
 }
 
+
 function createMesh(M, N, callback) {
     let ret = [];
     if (M == 1 && N == 1) {
@@ -588,19 +589,13 @@ function createMesh(M, N, callback) {
         let mdown = (r-1)*dy, mup = r*dy;
         let c = 1 - r % 2;
         let sign = (r % 2 == 1 ? 1 : -1);
-        for(let t = 0; t < num_triangles; t++) {
+        for(let t = 0; t < num_triangles; t+=2) {
             let triangle = [];
-            if (t % 2 == 0) {
-                // up triangle
-                // triangle = [[c, mdown], [c, mup], [c+ sign*dx, mdown]];
-                addTriangle([c, mdown], [c, mup], [c+ sign*dx, mdown])
-                c = c + sign*dx;
-            }
-            else {
-                // down triangle
-                // triangle = [[c-sign*dx, mup], [c, mdown], [c, mup]];
-                addTriangle([c-sign*dx, mup], [c, mdown], [c, mup])
-            }
+            // up triangle
+            addTriangle([c, mdown], [c, mup], [c+ sign*dx, mdown])
+            c = c + sign*dx;
+            // down triangle
+            addTriangle([c-sign*dx, mup], [c, mdown], [c, mup])
         }
     }
     return ret;
