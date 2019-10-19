@@ -669,6 +669,12 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
     let sphereV = state.sphereV;
     let cubeV = state.cubeV;
 
+    Date.now();
+    let date = new Date();
+    let hour = date.getHours()%12;
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
+
     m.identity();
     m.translate(0, 0,-4);
     m.save();
@@ -751,32 +757,36 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
                 gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
                 gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
                 gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
+                // seconds
                 m.translate(0, 0, 1.);
-                m.rotateZ(-state.time * Math.PI / 30);
+                m.rotateZ(-second / 60 * 2*Math.PI);
                 m.translate(0, 0.45, 1.);
                 m.rotateX(Math.PI / 2);
                 m.scale(.01,.01, 0.5);
                 drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
                 m.restore();
 
+                // minutes
                 m.save();
                 m.translate(0, 0, 1.);
-                m.rotateZ(-state.time * Math.PI / (30*60));
+                let th2 = -minute / 60 * 2*Math.PI - second / 60 * (Math.PI / 6);
+                m.rotateZ(th2);
                 m.translate(0, 0.3, 1.);
                 m.rotateX(Math.PI / 2);
                 m.scale(.01,.01, 0.3);
                 drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
                 m.restore();
 
+                // hour
                 m.save();
                 m.translate(0, 0, 1.);
-                m.rotateZ(-state.time/(30*60*60));
+                let th3 = -hour / 12 * 2*Math.PI - minute / 60 * (Math.PI / 6);
+                m.rotateZ(th3);
                 m.translate(0, 0.2, 1.);
                 m.rotateX(Math.PI / 2);
                 m.scale(.01,.01, 0.2);
                 drawShape([0,0,0], gl.TRIANGLE_STRIP, cylinderV);
                 m.restore();
-
         m.restore();
 
     // cube
