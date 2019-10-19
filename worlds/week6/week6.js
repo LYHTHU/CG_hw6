@@ -701,7 +701,7 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         m.save();
         m.translate(0, 1.0, 0);
 
-        let theta = 0.17*Math.cos(Math.sqrt(9.8 / 2)*state.time);
+        let theta = 0.1*Math.cos(Math.sqrt(9.8 / 2)*state.time);
 
         m.rotateZ(theta);
         m.translate(0, -0.1, 0);
@@ -789,42 +789,42 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5, 0.5, 0.5]);
         gl.uniform1f(state.uMaterialsLoc[0].refraction, 1.5);
             m.save();
-            m.translate(-.4, 0, 0);
+            m.translate(-.3, 0, 0);
             m.scale(0.03, 1.0, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
             m.save();
-            m.translate(0.4, 0, 0);
+            m.translate(0.3, 0, 0);
             m.scale(0.03, 1.0, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
 
             m.save();
             m.translate(0, -0.97, 0);
-            m.scale(0.4, 0.03, .4);
+            m.scale(0.3, 0.03, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
 
             m.save();
             m.translate(0, +0.97, 0);
-            m.scale(0.4, 0.03, .4);
+            m.scale(0.3, 0.03, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
 
             m.save();
             m.translate(0, +1.4, 0);
-            m.scale(0.4, 0.03, .4);
+            m.scale(0.3, 0.03, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
 
             m.save();
-            m.translate(-.4, 1.15, 0);
+            m.translate(-.3, 1.15, 0);
             m.scale(0.03, 0.3, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
 
             m.save();
-            m.translate(+.4, 1.15, 0);
+            m.translate(+.3, 1.15, 0);
             m.scale(0.03, 0.3, .4);
             drawShape([0, 0, 0], gl.TRIANGLES, cubeV);
             m.restore();
