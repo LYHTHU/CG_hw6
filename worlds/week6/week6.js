@@ -683,7 +683,7 @@ function onDraw(t, projMat, viewMat, state, eyeIdx) {
         gl.uniform3fv(state.uMaterialsLoc[0].ambient, [1.0, 0.1, 0]);
         gl.uniform3fv(state.uMaterialsLoc[0].diffuse, [1.0, 0.1, 0]);
         gl.uniform3fv(state.uMaterialsLoc[0].specular, [0.,1.,1.]);
-        gl.uniform1f (state.uMaterialsLoc[0].power   , 10.);
+        gl.uniform1f (state.uMaterialsLoc[0].power   , 20.);
         gl.uniform3fv(state.uMaterialsLoc[0].reflectc , [1.0,1.0,1.0]);
         gl.uniform3fv(state.uMaterialsLoc[0].transparent, [0.5,0.5,0.5]);
         gl.uniform1f (state.uMaterialsLoc[0].refraction   , 1.5);
