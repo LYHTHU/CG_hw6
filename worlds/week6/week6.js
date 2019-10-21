@@ -1,7 +1,7 @@
 "use strict"
 
 
-const VERTEX_SIZE = 8; // EACH VERTEX CONSISTS OF: x,y,z, ny,ny,nz, u,v
+const VERTEX_SIZE = 6; // EACH VERTEX CONSISTS OF: x,y,z, ny,ny,nz, u,v
 
 class Mat {
     constructor(height, width, v = 0.0) {
@@ -201,7 +201,6 @@ let createCubeVertices = () => {
    let v = [];
    let addVertex = a => {
       v = v.concat(a);
-      v = v.concat([0, 0]);
    }
 
    // EACH SQUARE CONSISTS OF TWO TRIANGLES.
@@ -573,9 +572,6 @@ function createMesh(M, N, callback) {
         let x = callback(a[0], a[1]);
         let y = callback(b[0], b[1]);
         let z = callback(c[0], c[1]);
-        x = x.concat(a);
-        y = y.concat(b);
-        z = z.concat(c);
         ret = ret.concat(x);
         ret = ret.concat(y);
         ret = ret.concat(z);
