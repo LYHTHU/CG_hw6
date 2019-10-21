@@ -66,7 +66,9 @@ vec3 phong(vec3 inter_point, int index) {
     vec3 color=uMaterials[index].ambient;
     for(int j=0;j<NL;j++){
         Ray L = get_ray(inter_point,lights[j].src);
-        Ray E = get_ray(inter_point, eye);
+        // Ray E = get_ray(inter_point, eye);
+
+        Ray E = get_ray(vPos, vec3(vXY, 0));
         Ray R = reflect_ray(L, N);
         color += lights[j].rgb*(uMaterials[index].diffuse*max(0.,dot(N,L.dir)));
 
